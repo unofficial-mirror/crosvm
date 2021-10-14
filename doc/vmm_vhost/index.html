@@ -1,0 +1,45 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `vmm_vhost` crate."><meta name="keywords" content="rust, rustlang, rust-lang, vmm_vhost"><title>vmm_vhost - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../ayu.css" disabled ><script id="default-settings"></script><script src="../storage.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../vmm_vhost/index.html'><div class='logo-container rust-logo'><img src='../rust-logo.png' alt='logo'></div></a><p class="location">Crate vmm_vhost</p><div class="block version"><p>Version 0.1.0</p></div><div class="sidebar-elems"><a id="all-types" href="all.html"><p>See all vmm_vhost's items</p></a><div class="block items"><ul><li><a href="#modules">Modules</a></li><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li><li><a href="#constants">Constants</a></li><li><a href="#traits">Traits</a></li><li><a href="#types">Type Definitions</a></li></ul></div><p class="location"></p><div id="sidebar-vars" data-name="vmm_vhost" data-ty="mod" data-relpath="../"></div></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
+                <a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Crate <a class="mod" href="">vmm_vhost</a></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../src/vmm_vhost/lib.rs.html#4-164" title="goto source code">[src]</a></span></h1><div class="docblock"><p>Virtio Vhost Backend Drivers</p>
+<p>Virtio devices use virtqueues to transport data efficiently. The first generation of virtqueue
+is a set of three different single-producer, single-consumer ring structures designed to store
+generic scatter-gather I/O. The virtio specification 1.1 introduces an alternative compact
+virtqueue layout named &quot;Packed Virtqueue&quot;, which is more friendly to memory cache system and
+hardware implemented virtio devices. The packed virtqueue uses read-write memory, that means
+the memory will be both read and written by both host and guest. The new Packed Virtqueue is
+preferred for performance.</p>
+<p>Vhost is a mechanism to improve performance of Virtio devices by delegate data plane operations
+to dedicated IO service processes. Only the configuration, I/O submission notification, and I/O
+completion interruption are piped through the hypervisor.
+It uses the same virtqueue layout as Virtio to allow Vhost devices to be mapped directly to
+Virtio devices. This allows a Vhost device to be accessed directly by a guest OS inside a
+hypervisor process with an existing Virtio (PCI) driver.</p>
+<p>The initial vhost implementation is a part of the Linux kernel and uses ioctl interface to
+communicate with userspace applications. Dedicated kernel worker threads are created to handle
+IO requests from the guest.</p>
+<p>Later Vhost-user protocol is introduced to complement the ioctl interface used to control the
+vhost implementation in the Linux kernel. It implements the control plane needed to establish
+virtqueues sharing with a user space process on the same host. It uses communication over a
+Unix domain socket to share file descriptors in the ancillary data of the message.
+The protocol defines 2 sides of the communication, master and slave. Master is the application
+that shares its virtqueues. Slave is the consumer of the virtqueues. Master and slave can be
+either a client (i.e. connecting) or server (listening) in the socket communication.</p>
+</div><h2 id="modules" class="section-header"><a href="#modules">Modules</a></h2>
+<table><tr class="module-item"><td><a class="mod" href="vhost_user/index.html" title="vmm_vhost::vhost_user mod">vhost_user</a></td><td class="docblock-short"><p>The protocol for vhost-user is based on the existing implementation of vhost for the Linux
+Kernel. The protocol defines two sides of the communication, master and slave. Master is
+the application that shares its virtqueues. Slave is the consumer of the virtqueues.</p>
+</td></tr></table><h2 id="structs" class="section-header"><a href="#structs">Structs</a></h2>
+<table><tr class="module-item"><td><a class="struct" href="struct.VhostUserMemoryRegionInfo.html" title="vmm_vhost::VhostUserMemoryRegionInfo struct">VhostUserMemoryRegionInfo</a></td><td class="docblock-short"><p>Memory region configuration data.</p>
+</td></tr><tr class="module-item"><td><a class="struct" href="struct.VringConfigData.html" title="vmm_vhost::VringConfigData struct">VringConfigData</a></td><td class="docblock-short"><p>Vring configuration data.</p>
+</td></tr></table><h2 id="enums" class="section-header"><a href="#enums">Enums</a></h2>
+<table><tr class="module-item"><td><a class="enum" href="enum.Error.html" title="vmm_vhost::Error enum">Error</a></td><td class="docblock-short"><p>Error codes for vhost operations</p>
+</td></tr></table><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.VHOST_MAX_MEMORY_REGIONS.html" title="vmm_vhost::VHOST_MAX_MEMORY_REGIONS constant">VHOST_MAX_MEMORY_REGIONS</a></td><td class="docblock-short"><p>Maximum number of memory regions supported.</p>
+</td></tr></table><h2 id="traits" class="section-header"><a href="#traits">Traits</a></h2>
+<table><tr class="module-item"><td><a class="trait" href="trait.VhostBackend.html" title="vmm_vhost::VhostBackend trait">VhostBackend</a></td><td class="docblock-short"><p>An interface for setting up vhost-based backend drivers with interior mutability.</p>
+</td></tr><tr class="module-item"><td><a class="trait" href="trait.VhostBackendMut.html" title="vmm_vhost::VhostBackendMut trait">VhostBackendMut</a></td><td class="docblock-short"><p>An interface for setting up vhost-based backend drivers.</p>
+</td></tr></table><h2 id="types" class="section-header"><a href="#types">Type Definitions</a></h2>
+<table><tr class="module-item"><td><a class="type" href="type.Result.html" title="vmm_vhost::Result type">Result</a></td><td class="docblock-short"><p>Result of vhost operations</p>
+</td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../" data-current-crate="vmm_vhost"></div>
+    <script src="../main.js"></script><script defer src="../search-index.js"></script></body></html>
